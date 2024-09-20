@@ -4,23 +4,23 @@ import { useState, useEffect } from "react";
 import { Input } from "@/common/components/input";
 import { Select } from "@/common/components/select";
 import { Textarea } from "@/common/components/textarea";
-import { FaRegTrashAlt, FaPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
 
-
+import { Section } from "@/common/components/section";
+import { Spinner } from "@/common/components/spinner";
 
 export default function DailyPage() {
   const [majorGoals, setMajorGoals] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [dailyInputs, setDailyInputs] = useState({
     achievement: "",
     alignedGoal: "",
     focusTask: "",
     focusTime: "",
     neededInputs: "",
-    brainstorm: "",
   });
   const [newGoal, setNewGoal] = useState("");
-  const [editingGoalIndex, setEditingGoalIndex] = useState<number | null>(null);
-  const [editedGoalText, setEditedGoalText] = useState("");
 
   useEffect(() => {
     const storedGoals = JSON.parse(localStorage.getItem("majorGoals") || "[]");
@@ -29,6 +29,7 @@ export default function DailyPage() {
       localStorage.getItem("dailyInputs") || "{}"
     );
     setDailyInputs(storedInputs);
+    setIsLoading(false);
   }, []);
 
   const saveMajorGoals = (goals: string[]) => {
@@ -60,7 +61,6 @@ export default function DailyPage() {
       focusTask: "",
       focusTime: "",
       neededInputs: "",
-      brainstorm: "",
     };
     saveDailyInputs(emptyInputs);
   };
@@ -77,57 +77,65 @@ export default function DailyPage() {
         Kill today's procrastination
       </h1>
 
-      <section className="mb-12">
-        <h2 className="text-3xl font-semibold mb-6 text-white">Major Goals</h2>
+      <Section className="space-y-4">
+        <h2 className="text-3xl font-semibold text-white">Goals</h2>
+        <p className="text-xl">What are your overall goals?</p>
         <p className="text-gray-400 mb-4">Click on a goal to edit</p>
-        <ul className="space-y-4 w-full">
-          {majorGoals.map((goal, index) => (
-            <li
-              key={index}
-              className="flex items-center justify-start text-white text-lg gap-4 w-full"
-            >
-              <button
-                onClick={() => deleteMajorGoal(index)}
-                className="text-gray-400 hover:text-white transition-colors py-3 px-4"
-                aria-label="Delete goal"
-              >
-                <FaRegTrashAlt />
-              </button>
-              <Input
-                type="text"
-                value={goal}
-                onChange={(e) => updateGoal(index, e.target.value)}
-                className="border-0 bg-transparent"
-              />
-            </li>
-          ))}
-        </ul>
-        {majorGoals.length < 3 && (
-          <div className="mt-6 flex space-x-4 items-center">
-            <Input
-              type="text"
-              value={newGoal}
-              onChange={(e) => setNewGoal(e.target.value)}
-              placeholder="Enter a new major goal"
-            />
-            <button
-              onClick={addMajorGoal}
-              className="border border-gray-600 text-white hover:bg-blue-600 transition-colors text-lg text-nowrap rounded-full p-4"
-              aria-label="Add goal"
-            >
-              <FaPlus />
-
-            </button>
+        {isLoading ? (
+          <div className="flex justify-center items-center">
+            <Spinner />
           </div>
+        ) : (
+          <>
+            <ul className="flex flex-col gap-2 w-full">
+              {majorGoals.map((goal, index) => (
+                <li
+                  key={index}
+                  className="flex items-center justify-start text-white text-lg gap-4 w-full"
+                >
+                  <Input
+                    type="text"
+                    value={goal}
+                    onChange={(e) => updateGoal(index, e.target.value)}
+                    className="border-0 bg-transparent"
+                  />
+                  <button
+                    onClick={() => deleteMajorGoal(index)}
+                    className="text-gray-400 hover:text-white transition-colors py-3 px-4"
+                    aria-label="Delete goal"
+                  >
+                    <IoMdClose size={24} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+            {majorGoals.length < 3 && (
+              <div className="mt-6 flex space-x-4 items-center">
+                <Input
+                  type="text"
+                  value={newGoal}
+                  onChange={(e) => setNewGoal(e.target.value)}
+                  placeholder="Enter a new major goal"
+                />
+                <button
+                  onClick={addMajorGoal}
+                  className="border border-gray-600 text-white hover:bg-blue-600 transition-colors text-lg text-nowrap rounded-full p-4"
+                  aria-label="Add goal"
+                >
+                  <FaPlus />
+                </button>
+              </div>
+            )}
+          </>
         )}
-      </section>
+      </Section>
 
-      <section className="space-y-6">
+      <Section className="space-y-4">
         <h2 className="text-3xl font-semibold mb-6 text-white">Daily Inputs</h2>
         <div>
-          <Input
-            label="What are you going to focus on now?"
-            type="text"
+          <Textarea
+            label="What do you want to accomplish next?"
+            description="Describe the optimal outcome you want to achieve, rather than how you're going to do it."
             id="achievement"
             value={dailyInputs.achievement}
             onChange={(e) =>
@@ -139,7 +147,7 @@ export default function DailyPage() {
           <Select
             label="With what major goal does that align?"
             options={[
-              ...majorGoals.map((goal, index) => ({
+              ...majorGoals.map((goal) => ({
                 value: goal,
                 label: goal,
               })),
@@ -153,9 +161,8 @@ export default function DailyPage() {
           />
         </div>
         <div>
-          <Input
+          <Textarea
             label="What task are you going to focus on today to achieve that?"
-            type="text"
             id="focusTask"
             value={dailyInputs.focusTask}
             onChange={(e) =>
@@ -166,6 +173,7 @@ export default function DailyPage() {
         <div>
           <Input
             label="For how long will you focus on that?"
+            description="How much time do you plan to spend giving your full attention to the task?"
             type="text"
             id="focusTime"
             value={dailyInputs.focusTime}
@@ -174,7 +182,7 @@ export default function DailyPage() {
             }
           />
         </div>
-        <div>
+        {/* <div>
           <Textarea
             label="What inputs do you need?"
             id="neededInputs"
@@ -184,18 +192,7 @@ export default function DailyPage() {
             }
             rows={3}
           />
-        </div>
-        <div>
-          <Textarea
-            label="Brainstorm freely here"
-            id="brainstorm"
-            value={dailyInputs.brainstorm}
-            onChange={(e) =>
-              saveDailyInputs({ ...dailyInputs, brainstorm: e.target.value })
-            }
-            rows={3}
-          />
-        </div>
+        </div> */}
         <div className="flex justify-end">
           <button
             onClick={resetDailyInputs}
@@ -204,7 +201,7 @@ export default function DailyPage() {
             Reset Daily Inputs
           </button>
         </div>
-      </section>
+      </Section>
     </div>
   );
 }

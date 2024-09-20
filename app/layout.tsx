@@ -36,7 +36,9 @@ export default function RootLayout({
       >
         <header className="border-b border-gray-600 text-white p-4">
           <div className="container mx-auto flex justify-between items-center">
-            <div className="text-2xl font-bold">Kill Procrastination</div>
+            <div className="text-2xl font-bold">
+              <Link href="/">Kill Procrastination</Link>
+            </div>
             <nav>
               <ul className="flex space-x-4">
                 <li>
@@ -47,13 +49,12 @@ export default function RootLayout({
                     Daily
                   </Link>
                 </li>
-                {/* Add more navigation items here */}
               </ul>
             </nav>
           </div>
         </header>
         <main className="flex-grow w-full">{children}</main>
-        <footer className="border-t border-gray-600 text-white p-4 mt-auto">
+        <footer className="border-t border-gray-600 text-white p-4 mt-auto mb-[93px] lg:mb-0">
           <div className="container mx-auto text-center">
             © {new Date().getFullYear()} Kill Procrastination
           </div>
