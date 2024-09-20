@@ -25,3 +25,23 @@ body {
     text-wrap: balance;
   }
 }
+
+.bg-animated {
+  --animation-duration: 10s;
+  background-size: 400%;
+
+  -webkit-animation: bg-animation var(--animation-duration) ease infinite;
+  -moz-animation: bg-animation var(--animation-duration) ease infinite;
+  animation: bg-animation var(--animation-duration) ease infinite;
+}
+
+@keyframes bg-animation {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
