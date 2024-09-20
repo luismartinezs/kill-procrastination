@@ -1,4 +1,5 @@
 "use client"
+import Script from "next/script";
 import { Brainstorm } from "./components/brainstorm";
 import { useRef } from "react";
 
@@ -12,6 +13,14 @@ export default function DailyLayout({ children }: { children: React.ReactNode })
 
   return (
     <>
+      <head>
+      {process.env.NODE_ENV === "production" && (
+          <Script
+            defer
+            src="https://cloud.umami.is/script.js"
+            data-website-id="8452a44f-1b47-43dd-9d6c-1521e23a7a05"
+          />
+        )}      </head>
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-black border-t border-gray-700 p-3 z-10 shadow-lg">
         <div className="flex justify-around items-center max-w-md mx-auto">
           <button
