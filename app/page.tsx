@@ -15,7 +15,7 @@ export default function Home() {
           <span className="relative z-10">Start Your Productive Day</span>
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 bg-animated"></div>
         </Link>
-        <p className="mt-4 text-sm text-gray-400">It's free!</p>
+        <p className="mt-4 text-sm text-gray-400">It&apos;s free!</p>
       </div>
     </div>
   );

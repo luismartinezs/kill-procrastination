@@ -74,7 +74,7 @@ export default function DailyPage() {
   return (
     <div className="container mx-auto px-4 py-12 max-w-3xl">
       <h1 className="text-xl font-bold mb-8 text-white">
-        Kill today's procrastination
+        Kill today&apos;s procrastination
       </h1>
 
       <Section className="space-y-4">
