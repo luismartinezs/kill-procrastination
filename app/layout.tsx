@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Link from "next/link";
 import { cn } from "@/utils/cn";
+import Script from "next/script";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,6 +28,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {process.env.NODE_ENV === "production" && (
+          <Script
+            defer
+            src="https://cloud.umami.is/script.js"
+            data-website-id="8452a44f-1b47-43dd-9d6c-1521e23a7a05"
+          />
+        )}{" "}
+      </head>
       <body
         className={cn(
           geistSans.variable,
